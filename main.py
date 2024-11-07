@@ -12,33 +12,23 @@ if response.status_code == 200:
     # Parse the HTML content with BeautifulSoup
     soup = BeautifulSoup(response.text, 'html.parser')
     
+    # Prayer names and their corresponding IDs
+    prayers = {
+        'Fajr': 'fajr',
+        'Zuhr': 'zuhr',
+        'Asr': 'asr',
+        'Maghrib': 'maghrib',
+        'Isha': 'esha'
+    }
+
     # Dictionary to store the extracted Salaah times
     salaah_times = {}
 
-    # Extracting Fajr time
-    fajr_athan = soup.find('h5', id='fajrAthan').text.strip()
-    fajr_jamaah = soup.find('h5', id='fajrJamaah').text.strip()
-    salaah_times['Fajr'] = {'Adhan': fajr_athan, 'Jamaah': fajr_jamaah}
-
-    # Extracting Zuhr time
-    zuhr_athan = soup.find('h5', id='zuhrAthan').text.strip()
-    zuhr_jamaah = soup.find('h5', id='zuhrJamaah').text.strip()
-    salaah_times['Zuhr'] = {'Adhan': zuhr_athan, 'Jamaah': zuhr_jamaah}
-
-    # Extracting Asr time
-    asr_athan = soup.find('h5', id='asrAthan').text.strip()
-    asr_jamaah = soup.find('h5', id='asrJamaah').text.strip()
-    salaah_times['Asr'] = {'Adhan': asr_athan, 'Jamaah': asr_jamaah}
-
-    # Extracting Maghrib time
-    maghrib_athan = soup.find('h5', id='maghribAthan').text.strip()
-    maghrib_jamaah = soup.find('h5', id='maghribJamaah').text.strip()
-    salaah_times['Maghrib'] = {'Adhan': maghrib_athan, 'Jamaah': maghrib_jamaah}
-
-    # Extracting Isha time
-    isha_athan = soup.find('h5', id='eshaAthan').text.strip()
-    isha_jamaah = soup.find('h5', id='eshaJamaah').text.strip()
-    salaah_times['Isha'] = {'Adhan': isha_athan, 'Jamaah': isha_jamaah}
+    # Loop through each prayer and extract the Athan and Jamaah times
+    for prayer, prayer_id in prayers.items():
+        athan_time = soup.find('h5', id=f'{prayer_id}Athan').text.strip()
+        jamaah_time = soup.find('h5', id=f'{prayer_id}Jamaah').text.strip()
+        salaah_times[prayer] = {'Adhan': athan_time, 'Jamaah': jamaah_time}
 
     # Print the Salaah times
     print("Salaah Times:")
